@@ -1,0 +1,92 @@
+{% extends 'components/base.html' %}
+{% block body %}
+
+<div class="container mt-4">
+
+<h2>My Orders</h2>
+
+{% for order in orders %}
+    <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="w-100 pt-1 mb-5 text-right">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{% url 'shop' %}" method="get" class="modal-content modal-body border-0 p-0">
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="inputModalSearch" name="search" placeholder="Search ...">
+                    <button type="submit" class="input-group-text bg-success text-light">
+                        <i class="fa fa-fw fa-search text-white"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+<div class="card mb-3 p-3">
+
+    <!-- STATUS -->
+    <p>
+        Status:
+        {% if order.status == "pending" %}
+            <span class="badge bg-warning">Pending</span>
+        {% elif order.status == "approved" %}
+            <span class="badge bg-success">Approved</span>
+        {% elif order.status == "cancelled" %}
+            <span class="badge bg-dark">Cancelled</span>
+        {% else %}
+            <span class="badge bg-danger">Rejected</span>
+        {% endif %}
+    </p>
+
+    <p>Date: {{ order.created_at }}</p>
+
+    <hr>
+
+    <!-- ITEMS -->
+    {% for item in order.items.all %}
+        <div class="d-flex align-items-center mb-2">
+
+            {% if item.product.image %}
+                <img src="{{ item.product.image.url }}"
+                     style="width:60px;height:60px;object-fit:cover;"
+                     class="me-2 rounded">
+            {% endif %}
+
+            <div>
+                <strong>{{ item.product.name }}</strong><br>
+                Size: {{ item.size }} |
+                Qty: {{ item.quantity }} |
+                Price: {{ item.price }}ks
+            </div>
+
+        </div>
+    {% endfor %}
+
+    <!-- ACTION BUTTON (ONLY ONCE) -->
+    <div class="mt-2">
+
+        {% if order.status == "pending" %}
+            <a href="{% url 'cancel_order' order.id %}"
+               class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                Cancel Order
+            </a>
+
+        {% elif order.status == "approved" %}
+            <button class="btn btn-secondary btn-sm" disabled>
+                Cannot Cancel (Approved)
+            </button>
+
+        {% elif order.status == "cancelled" %}
+            <span class="badge bg-dark">Cancelled</span>
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% empty %}
+<p>No orders found</p>
+{% endfor %}
+
+</div>
+
+{% endblock %}

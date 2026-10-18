@@ -1,0 +1,163 @@
+<nav
+  class="navbar navbar-expand-lg bg-success navbar-light d-none d-sm-block"
+  id="templatemo_nav_top"
+>
+  <div class="container text-light">
+    <div class="w-100 d-flex justify-content-between">
+      <div>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        />
+      </div>
+    </div>
+  </div>
+</nav>
+<!-- Close Top Nav -->
+
+<!-- Header -->
+<nav class="navbar navbar-expand-lg navbar-light shadow">
+  <div class="container d-flex justify-content-between align-items-center">
+<style>
+  .navbar-brand {
+    font-size: 34px;
+    font-weight: 700;
+    transition: 0.3s ease;
+  }
+
+  .gradient-text {
+    background: linear-gradient(45deg, #00c853, #009688);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    letter-spacing: 1px;
+  }
+
+  .navbar-brand:hover {
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 768px) {
+    .navbar-brand {
+    background: linear-gradient(45deg, #034e23, #0aceff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    letter-spacing: 1px;    }
+  }
+</style>
+
+<a class="navbar-brand logo d-flex align-items-center gap-2 fw-bold" href="index.html">
+  <span style="color:#00c853;">✦</span>
+  <span class="gradient-text">
+    StyleNest
+  </span>
+</a>
+
+    <button
+      class="navbar-toggler border-0"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#templatemo_main_nav"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div
+      class="align-self-center collapse navbar-collapse flex-fill d-lg-flex justify-content-lg-between"
+      id="templatemo_main_nav"
+    >
+      <div class="flex-fill">
+        <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/shop/">Shop</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact/">Contact</a>
+          </li>
+                    <li class="nav-item">
+            <a class="nav-link" href="/my_orders/">My Order</a>
+          </li>
+          {% if request.user.is_staff %}
+
+          <li class="nav-item">
+            <a class="nav-link" href="/superuser/admincontrol/"
+              >Admin control</a
+            >
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+      <div class="navbar align-self-center d-flex">
+        <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
+          <form method="GET" action="{% url 'shop' %}">
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                name="search"
+                value="{{ search }}"
+                placeholder="Search..."
+              />
+
+              <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+          </form>
+        </div>
+        <a
+          class="nav-icon d-none d-lg-inline"
+          href="#"
+          data-bs-toggle="modal"
+          data-bs-target="#templatemo_search"
+        >
+          <i class="fa fa-fw fa-search text-dark mr-2"></i>
+        </a>
+        <a
+          class="nav-icon position-relative text-decoration-none"
+          href="/cart/"
+        >
+          <i class="fa-solid fa-heart text-dark mr-1"></i>
+
+          {% if cart_count > 0 %}
+          <span
+            class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-danger"
+          >
+            {{ cart_count }}
+          </span>
+          {% endif %}
+        </a>
+        {% if request.user.is_authenticated %}
+        <a
+          class="nav-icon position-relative text-decoration-none"
+          href="/logout/"
+        >
+          <i class="fa-solid fa-right-from-bracket text-dark mr-3"></i>
+        </a>
+        {% else %}
+
+        <a
+          class="nav-icon position-relative text-decoration-none"
+          href="/login/"
+        >
+          <i class="fa fa-fw fa-user text-dark mr-3"></i>
+          <span
+            class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"
+            ></span
+          >
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>

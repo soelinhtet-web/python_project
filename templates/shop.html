@@ -1,0 +1,296 @@
+{% extends 'components/base.html' %}
+{% load static %}
+{% block body %}
+
+<body>
+    <!-- Modal -->
+    <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="w-100 pt-1 mb-5 text-right">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="" method="get" class="modal-content modal-body border-0 p-0">
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="inputModalSearch" name="search" placeholder="Search ...">
+                    <button type="submit" class="input-group-text bg-success text-light">
+                        <i class="fa fa-fw fa-search text-white"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Start Content -->
+    <div class="container py-5">
+        <div class="row">
+
+            <div class="col-lg-3">
+                <h1 class="h2 pb-4">Categories</h1>
+                <ul class="list-unstyled text-light footer-link-list">
+
+                            <!-- ALL PRODUCTS -->
+        <li class="mb-3">
+            <a href="{% url 'shop' %}{% if search %}?search={{ search|urlencode }}{% endif %}"
+               class="text-decoration-none h5
+               {% if not selected_category %}text-success fw-bold{% else %}text-dark{% endif %} text-decoration-none h3 text-success">
+                All Products
+            </a>
+        </li>
+
+    {% for cat in categories %}
+    <li class="mb-3 text-dark">
+        <a href="?category={{ cat.name }}"
+        class="{% if selected_category == cat.name %}text-success fw-bold{% endif %} text-decoration-none h3 text-success">
+            {{ cat.name }}
+        </a>
+    </li>
+    {% endfor %}
+    </ul>
+            </div>
+
+            <div class="col-lg-9">
+                <div class="row">
+                    <div class="col-md-6 pb-4">
+                        <div class="d-flex">
+
+
+<select class="form-control"
+        onchange="if(this.value) location.href=this.value;">
+
+    <option
+        value="{% url 'shop' %}?sort=featured{% if selected_category %}&amp;category={{ selected_category|urlencode }}{% endif %}{% if search %}&amp;search={{ search|urlencode }}{% endif %}"
+        {% if sort == 'featured' %}selected{% endif %}>
+        Featured
+    </option>
+
+    <option
+        value="{% url 'shop' %}?sort=az{% if selected_category %}&amp;category={{ selected_category|urlencode }}{% endif %}{% if search %}&amp;search={{ search|urlencode }}{% endif %}"
+        {% if sort == 'az' %}selected{% endif %}>
+        A to Z
+    </option>
+
+    <option
+        value="{% url 'shop' %}?sort=item{% if selected_category %}&amp;category={{ selected_category|urlencode }}{% endif %}{% if search %}&amp;search={{ search|urlencode }}{% endif %}"
+        {% if sort == 'item' %}selected{% endif %}>
+        Item
+    </option>
+
+</select>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row"> 
+
+                    {% for Card in Cards %}
+                    <div class="col-md-4">
+                        <div class="card mb-4 product-wap rounded-0">
+                            <div class="card rounded-0">
+                                {% if Card.image %}
+                                    <img class="card-img rounded-0 img-fluid " src="{{ Card.image.url }}" style="height: 19rem;">
+                                {% endif %}
+                                <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+<ul class="list-unstyled d-flex flex-column gap-2">
+
+    <!-- VIEW -->
+    <li>
+        <a class="btn btn-success text-white w-100 d-flex justify-content-center align-items-center"
+           href="{% url 'CardList' Card.id %}">
+            <i class="far fa-eye"></i>
+        </a>
+    </li>
+
+    <!-- ADD TO CART -->
+    <li>
+<form method="POST" action="{% url 'add_to_cart' Card.id %}">
+    {% csrf_token %}
+
+    <input type="hidden" name="action" value="quick_cart">
+
+    <button type="submit"
+        class="btn btn-success text-white w-100 d-flex justify-content-center align-items-center">
+
+        <i class="far fa-heart"></i>
+
+    </button>
+</form>
+    </li>
+
+    <!-- BUY NOW -->
+    <li>
+        <a class="btn btn-success text-white w-100 d-flex justify-content-center align-items-center"
+           href="{% url 'CardList' Card.id %}">
+            <i class="fas fa-cart-plus"></i>
+        </a>
+    </li>
+
+</ul>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <a href="/card/list/{{Card.id}}" class="h3 text-decoration-none">{{ Card.name }}</a>
+                                <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
+                                    <li>{{ Card.size }}</li>
+                                    <li class="pt-2">
+                                        <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
+                                        <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
+                                        <span class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
+                                        <span class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
+                                        <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
+                                    </li>
+                                </ul>
+                                <ul class="list-unstyled d-flex justify-content-center mb-1">
+                                    <li>
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= Card.starrating %}
+                                                <i class="text-warning fa fa-star"></i>
+                                            {% else %}
+                                                <i class="text-muted fa fa-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </li>
+                                </ul>
+                                <p class="text-center mb-0">{{ Card.price }} ks</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+<!-- PAGINATION -->
+<div class="row mt-4">
+    {% if Cards.has_other_pages %}
+    <nav aria-label="Shop pagination">
+        <ul class="pagination justify-content-end flex-wrap">
+
+            <!-- PREVIOUS -->
+            {% if Cards.has_previous %}
+            <li class="page-item">
+                <a class="page-link"
+                   href="?page={{ Cards.previous_page_number }}{% if query_params %}&amp;{{ query_params }}{% endif %}">
+                    Previous
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Previous</span>
+            </li>
+            {% endif %}
+
+            <!-- PAGE NUMBERS -->
+            {% for num in Cards.paginator.page_range %}
+                {% if Cards.number == num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a class="page-link"
+                       href="?page={{ num }}{% if query_params %}&amp;{{ query_params }}{% endif %}">
+                        {{ num }}
+                    </a>
+                </li>
+                {% endif %}
+            {% endfor %}
+
+            <!-- NEXT -->
+            {% if Cards.has_next %}
+            <li class="page-item">
+                <a class="page-link"
+                   href="?page={{ Cards.next_page_number }}{% if query_params %}&amp;{{ query_params }}{% endif %}">
+                    Next
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Next</span>
+            </li>
+            {% endif %}
+
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+            </div>
+
+        </div>
+    </div>
+    <!-- End Content -->
+
+    <!-- Start Brands -->
+    <section class="bg-light py-5">
+        <div class="container my-4">
+            <div class="row text-center py-3">
+                <div class="col-lg-6 m-auto">
+                    <h1 class="h1">Our Brands</h1>
+                    <p>
+                        StyleNest collaborates with curated fashion brands to deliver timeless design, modern
+                        aesthetics, and premium quality for every lifestyle.
+                    </p>
+                </div>
+                <div class="col-lg-9 m-auto tempaltemo-carousel">
+                    <div class="row d-flex flex-row">
+                        <!--Controls-->
+                        <div class="col-1 align-self-center">
+                            <a class="h1" href="#templatemo-slide-brand" role="button" data-bs-slide="prev">
+                                <i class="text-light fas fa-chevron-left"></i>
+                            </a>
+                        </div>
+                        <!--End Controls-->
+
+                        <!--Carousel Wrapper-->
+                        <div class="col">
+                            <div class="carousel slide carousel-multi-item pt-2 pt-md-0" id="templatemo-slide-brand"
+                                data-bs-ride="carousel">
+                                <!--Slides-->
+<div class="carousel-inner product-links-wap" role="listbox">
+
+    {% for brand in brands %}
+
+        {% if forloop.counter0|divisibleby:4 %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <div class="row">
+        {% endif %}
+
+                {% if brand.image %}
+                <div class="col-3 p-md-5">
+                    <a href="#">
+                        <img class="img-fluid brand-img"
+                             src="{{ brand.image.url }}"
+                             alt="Brand Logo">
+                    </a>
+                </div>
+                {% endif %}
+
+        {% if forloop.counter|divisibleby:4 or forloop.last %}
+            </div>
+        </div>
+        {% endif %}
+
+    {% endfor %}
+
+</div>
+                                <!--End Slides-->
+                            </div>
+                        </div>
+                        <!--End Carousel Wrapper-->
+
+                        <!--Controls-->
+                        <div class="col-1 align-self-center">
+                            <a class="h1" href="#templatemo-slide-brand" role="button" data-bs-slide="next">
+                                <i class="text-light fas fa-chevron-right"></i>
+                            </a>
+                        </div>
+                        <!--End Controls-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--End Brands-->
+
+
+</body>
+
+{% endblock %}

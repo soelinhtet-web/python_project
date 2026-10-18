@@ -1,0 +1,124 @@
+{% extends 'components/base.html' %}
+{% load static %}
+{% block body %}
+
+<div class="m-5">
+
+    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+
+        <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off">
+        <label class="btn btn-outline-success m-1" for="btnradio1" onclick="location.href='/superuser/admincontrol/'">
+            Admin Control
+        </label>
+
+        <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+        <label class="btn btn-outline-success m-1" for="btnradio2" onclick="location.href='/adminContact/view/'">
+            Contact View
+        </label>
+
+        <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+        <label class="btn btn-outline-success m-1" for="btnradio3" onclick="location.href='/admincontrol/login/view/'">
+            Login View
+        </label>
+
+        <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off">
+
+        <label class="btn btn-outline-success m-1 active" for="btnradio4" onclick="location.href='/superuser/orders/'">
+            Order View
+        </label>
+
+    </div>
+
+    <h2>Orders</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>User</th>
+                <th>Product</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for order in orders %}
+            <tr>
+
+                <td>{{ forloop.counter }}</td>
+                <td>{{ order.user.username }}</td>
+
+                <!-- ⭐ ITEMS (NEW PART) -->
+                <td>
+                    {% for item in order.items.all %}
+
+                    <div class="d-flex align-items-center mb-2">
+
+                        <!-- IMAGE -->
+                        {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" width="50" height="50" class="rounded me-2">
+                        {% endif %}
+
+                        <!-- NAME + SIZE + QTY -->
+                        <div>
+                            <strong>{{ item.product.name }}</strong><br>
+                            <small>
+                                Size: {{ item.size }} |
+                                Qty: {{ item.quantity }}
+                            </small>
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+                </td>
+
+                <!-- STATUS -->
+                <td>
+                    {% if order.status == "pending" %}
+                    <span class="badge bg-warning">Pending</span>
+                    {% elif order.status == "approved" %}
+                    <span class="badge bg-success">Approved</span>
+                    {% elif order.status == "rejected" %}
+                    <span class="badge btn-danger">Rejected</span>
+                    {% endif %}
+                </td>
+
+                <!-- DATE -->
+                <td>{{ order.created_at }}</td>
+
+                <!-- ACTION -->
+                <td>
+
+                    {% if order.status == "pending" %}
+
+                    <a href="{% url 'approve_order' order.id %}" class="btn btn-success btn-sm">
+                        Approve
+                    </a>
+
+                    <a href="{% url 'reject_order' order.id %}" class="btn btn-danger btn-sm">
+                        Reject
+                    </a>
+
+                    {% else %}
+                    <span class="text-muted">Locked</span>
+                    {% endif %}
+
+                </td>
+
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center text-muted">
+                    No Orders Found
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+
+{% endblock %}

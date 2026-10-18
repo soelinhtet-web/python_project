@@ -1,0 +1,152 @@
+
+<footer class="bg-dark" id="tempaltemo_footer">
+    <div class="container">
+        <div class="row">
+
+            <!-- CONTACT -->
+            <div class="col-md-4 pt-5">
+                <h2 class="h2 text-success border-bottom pb-3 border-light logo">
+                    {% if footer %}
+                        {{ footer.brand_name }}
+                    {% else %}
+                        StyleNest ✦
+                    {% endif %}
+                </h2>
+
+                <ul class="list-unstyled text-light footer-link-list">
+                    {% if footer %}
+                        {% if footer.address %}
+                        <li>
+                            <i class="fas fa-map-marker-alt fa-fw"></i>
+                            {{ footer.address }}
+                        </li>
+                        {% endif %}
+
+                        {% if footer.phone %}
+                        <li>
+                            <i class="fa fa-phone fa-fw"></i>
+                            <a href="tel:{{ footer.phone }}" class="text-decoration-none">
+                                {{ footer.phone }}
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if footer.email %}
+                        <li>
+                            <i class="fa fa-envelope fa-fw"></i>
+                            <a href="mailto:{{ footer.email }}" class="text-decoration-none">
+                                {{ footer.email }}
+                            </a>
+                        </li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+            </div>
+
+            <!-- PRODUCTS -->
+            <div class="col-md-4 pt-5">
+                <h2 class="h2 text-light border-bottom pb-3 border-light">
+                    Products
+                </h2>
+
+                <ul class="list-unstyled text-light footer-link-list">
+                    <li>
+                        <a class="text-decoration-none"
+                           href="{% url 'shop' %}">
+                            All Products
+                        </a>
+                    </li>
+
+                    {% for cat in categories %}
+                    <li>
+                        <a class="text-decoration-none"
+                           href="{% url 'shop' %}?category={{ cat.name|urlencode }}">
+                            {{ cat.name }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- FURTHER INFO -->
+            <div class="col-md-4 pt-5">
+                <h2 class="h2 text-light border-bottom pb-3 border-light">
+                    Further Info
+                </h2>
+
+                <ul class="list-unstyled text-light footer-link-list">
+                    {% for link in footer_links %}
+                    <li>
+                        <a class="text-decoration-none"
+                           href="{{ link.url }}">
+                            {{ link.title }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- SOCIAL MEDIA -->
+        <div class="row text-light mb-4">
+            <div class="col-12 mb-3">
+                <div class="w-100 my-3 border-top border-light"></div>
+            </div>
+
+            <div class="col-auto me-auto">
+                <ul class="list-inline footer-icons">
+                    {% if footer.facebook %}
+                    <li class="list-inline-item">
+                        <a class="text-light"
+                           target="_blank" rel="noopener noreferrer"
+                           href="{{ footer.facebook }}">
+                            <i class="fab fa-facebook-f fa-lg"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if footer.instagram %}
+                    <li class="list-inline-item">
+                        <a class="text-light"
+                           target="_blank" rel="noopener noreferrer"
+                           href="{{ footer.instagram }}">
+                            <i class="fab fa-instagram fa-lg"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if footer.twitter %}
+                    <li class="list-inline-item">
+                        <a class="text-light"
+                           target="_blank" rel="noopener noreferrer"
+                           href="{{ footer.twitter }}">
+                            <i class="fab fa-twitter fa-lg"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if footer.linkedin %}
+                    <li class="list-inline-item">
+                        <a class="text-light"
+                           target="_blank" rel="noopener noreferrer"
+                           href="{{ footer.linkedin }}">
+                            <i class="fab fa-linkedin fa-lg"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- COPYRIGHT -->
+    <div class="w-100 bg-black py-3">
+        <div class="container">
+            <p class="text-light mb-0">
+                Created by
+                {% if footer %}{{ footer.creator }}{% else %}OdayZone (Mg SLH){% endif %}
+            </p>
+        </div>
+    </div>
+</footer>

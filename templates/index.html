@@ -1,0 +1,180 @@
+{% extends 'components/base.html' %}
+{% load static %}
+{% block body %}
+<body>
+
+    <!-- Modal -->
+    <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="w-100 pt-1 mb-5 text-right">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{% url 'shop' %}" method="get" class="modal-content modal-body border-0 p-0">
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="inputModalSearch" name="search" placeholder="Search ...">
+                    <button type="submit" class="input-group-text bg-success text-light">
+                        <i class="fa fa-fw fa-search text-white"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <!-- Start Banner Hero -->
+{% if mainhero %}
+<div id="template-mo-zay-hero-carousel" class="carousel slide" data-bs-ride="carousel">
+
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        {% for main in mainhero %}
+        <li data-bs-target="#template-mo-zay-hero-carousel"
+            data-bs-slide-to="{{ forloop.counter0 }}"
+            class="{% if forloop.first %}active{% endif %}"></li>
+        {% endfor %}
+    </ol>
+
+    <!-- Slides -->
+    <div class="carousel-inner">
+        {% for main in mainhero %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <div class="container">
+                <div class="row p-5">
+                    <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                        {% if main.mainimage %}
+                        <img class="img-fluid" src="{{ main.mainimage.url }}" alt="main_image">
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-6 mb-0 d-flex align-items-center">
+                        <div class="text-align-left align-self-center">
+                            <h1 class="h1 text-success"><b>{{ main.maintitle }}</b></h1>
+                            <h3 class="h2">{{ main.descriptionTitle }}</h3>
+                            <p>{{ main.maindescription }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Controls -->
+    <a class="carousel-control-prev" href="#template-mo-zay-hero-carousel" role="button" data-bs-slide="prev">
+        <i class="fas fa-chevron-left"></i>
+    </a>
+    <a class="carousel-control-next" href="#template-mo-zay-hero-carousel" role="button" data-bs-slide="next">
+        <i class="fas fa-chevron-right"></i>
+    </a>
+
+</div>
+{% else %}
+            <div class="container">
+                <div class="row p-2">
+                    <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                        <img class="img-fluid my-4" src="../media/img/portrait-young-stylish-laughing-model-black-casual-summer-clothes-cap-with-natural-makeup-white.jpg" alt="main_image" width="500px" height="100px">
+                    </div>
+                    <div class="col-lg-6 mb-0 d-flex align-items-center">
+                        <div class="text-align-left align-self-center">
+                            <h1 class="h1 text-success text-center"><b>
+  Welcome to
+  StyleNest ✦
+</b></h1>
+
+<h3 class="h2 text-center">
+  Discover your signature style with modern fashion picks.  
+  From everyday essentials to standout outfits — StyleNest brings confidence to your wardrobe.
+</h3>                        </div>
+                    </div>
+                </div>
+            </div><hr>
+{% endif %}
+
+
+
+    <!-- End Banner Hero -->
+
+
+    <!-- Start Categories of The Month -->
+    <section class="container py-5">
+        <div class="row text-center pt-3">
+            <div class="col-lg-6 m-auto">
+<h1 class="h1">Trending Categories of the Month</h1>
+<p>
+  Explore this month’s hottest fashion picks — curated styles, everyday essentials, and must-have outfits for your wardrobe upgrade.
+</p>
+            </div>
+        </div>
+        <form class="row" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+                {% if categories %}
+                {% for category in categories %}
+            <div class="col-12 col-md-3 p-5 mt-3">
+                {% if category.image %}
+            <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.title }}" width="200" height="180">
+            {% endif %}                
+                <h5 class="text-center mt-3 mb-3">{{category.name}}</h5>
+                <p class="text-center"><a href="/shop/" class="btn btn-success">Go Shop</a></p>
+            </div>
+                {% endfor %}
+                {% endif %}
+
+        </form>
+    </section>
+    <!-- End Categories of The Month -->
+
+
+    <!-- Start Featured Product -->
+    <section class="bg-light">
+        <div class="container py-5">
+            <div class="row text-center py-3">
+                <div class="col-lg-6 m-auto">
+<h1 class="h1">Featured Products</h1>
+<p>
+  Discover this season’s standout picks — hand-selected pieces that blend comfort, trend, and everyday style for your wardrobe upgrade.
+</p>
+                </div>
+            </div>
+            <div class="row">
+                {% for feature in features %}
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="card h-100">
+                        <a href="/shop/">
+                        <img src="{{ feature.image.url }}" class="card-img-top" alt="{{ feature.title }}" width="100" height="300">
+                        </a>
+                        <div class="card-body">
+                            <ul class="list-unstyled d-flex justify-content-between">
+                     <li>
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= feature.rating %}
+                            <i class="text-warning fa fa-star"></i>
+                        {% else %}
+                            <i class="text-muted fa fa-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                </li>
+                            </ul>
+                            <a href="shop-single.html" class="h2 text-decoration-none text-dark">{{ feature.name }}</a>
+                            <p class="card-text">
+                                {{ feature.description }}
+                            </p>
+                            <p class="text-muted">  </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </section>
+    <!-- End Featured Product -->
+
+
+    <!-- Start Footer -->
+    <!-- End Footer -->
+
+
+</body>
+{% endblock %}
+
+</html>

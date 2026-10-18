@@ -1,0 +1,67 @@
+{% extends 'components/base.html' %}
+{% load static %}
+{% block body %}
+
+
+<div class="m-5">
+    <table class="table">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Image</th>
+      <th>Size</th>
+      <th>Quantity</th>
+      <th>Price</th>
+      <th>Total price</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for item in cart_items %}
+    <tr>
+      <td>{{ item.product.name }}</td>
+      <td>
+        {% if item.product.image %}
+          <img src="{{ item.product.image.url }}" width="80" height="80" style="object-fit: cover;">
+        {% else %}
+          No Image
+        {% endif %}
+      </td>
+      <td>{{ item.size }}</td>
+      <td>{{ item.quantity }}</td>
+      <td>{{ item.price }}</td>
+      <td>{{ item.total_price }}</td>
+      <td>
+            <a href="{% url 'cart_delete' item.id %}" class="btn btn-secondary btn-sm">
+                remove
+            </a>
+
+<a href="{% url 'order_single' item.id %}" 
+   class="btn btn-success btn-sm">
+    Order
+</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="5" class="text-center">Cart is empty</td>
+    </tr>
+    {% endfor %}
+
+  </tbody>
+
+</table>
+
+<h3 class="text-end mt-3 mr-3">
+  Total: {{ total }} Ks
+</h3>
+</div>
+
+<div class="text-end m-5">
+    <a href="{% url 'checkout' %}" class="btn btn-success btn-lg">
+        Order All
+    </a>
+</div>
+
+{% endblock %}

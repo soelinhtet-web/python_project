@@ -1,0 +1,64 @@
+{% extends 'components/base.html' %}
+{% load static %}
+{% block body %}
+
+<div class="m-5">
+
+  <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off">
+    <label class="btn btn-outline-success m-1" for="btnradio1" onclick="location.href='/superuser/admincontrol/'">
+      Admin Control
+    </label>
+
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+    <label class="btn btn-outline-success m-1" for="btnradio2" onclick="location.href='/adminContact/view/'">
+      Contact View
+    </label>
+
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+    <label class="btn btn-outline-success m-1 active
+  " for="btnradio3" onclick="location.href='/admincontrol/login/view/'">
+      Login View
+    </label>
+
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off">
+
+    <label class="btn btn-outline-success m-1" for="btnradio4" onclick="location.href='/superuser/orders/'">
+      Order View
+    </label>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">No</th>
+        <th scope="col">Name</th>
+        <th scope="col">Emil</th>
+        <th scope="col">Login Time</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for login in history %}
+      <tr>
+        <th>{{ forloop.counter }}</th>
+        <td>{{ login.user.username }}</td>
+        <td>{{ login.user.email }}</td>
+        <td>{{ login.login_time }}</td>
+        <td> <a href="/admincontrol/login/view/delete/{{login.id}}/" class="btn btn-sm btn-secondary px-3">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <div>
+          <p class="m-5 text-muted text-center fs-4">No User Login is found </p>
+        </div>
+      </tr>
+
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
